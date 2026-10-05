@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* ─── Reset & base ─────────────────────────────────────────────────────────── */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: #1e1e1e;
-  background-color: #f0f0f0;
+  color-scheme: dark;
+  color: #e2e8f0;
+  background-color: #0f1117;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,84 +17,175 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.calculadora {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #1e1e1e;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.teclado{
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 50%, #0f1117 100%);
+}
+
+/* ─── Títulos ──────────────────────────────────────────────────────────────── */
+
+h1 {
+  text-align: center;
+  padding: 2rem 1rem 0.5rem;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  background: linear-gradient(90deg, #818cf8, #c084fc, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+/* ─── Grid de calculadoras ─────────────────────────────────────────────────── */
+
+#calculadoras-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  max-width: 100%;
-  margin: 20px auto;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1.5rem 3rem;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.teclado button{
-  padding: 20px;
-  font-size: 1.5rem;
-  border: none;
-  border-radius: 5px;
-  background-color: #333;
-  color: white;
-  cursor: pointer;
+/* ─── Calculadora ──────────────────────────────────────────────────────────── */
+
+.calculadora {
+  background: linear-gradient(145deg, #1e2233, #161b27);
+  border: 1px solid rgba(129, 140, 248, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.teclado button:hover{
-  background-color: #555;
+.calculadora:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 36px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(129, 140, 248, 0.18) inset;
 }
 
-.teclado .span-two{
-  grid-column: span 2;
-}
-
-.teclado .operation{
-  background-color: #f57c00;
-}
-
-.teclado .operation:hover{
-  background-color: #ff9800;
-}
-
-.teclado .delete {
-  background-color: #d32f2f;
-}
-
-.teclado .delete:hover {
-  background-color: #f44336;
-}
-
-.teclado .equals {
-  background-color: #a0a0a0;
-}
-
-
-.teclado .reset {
-  background-color: #d5d513;
-  color:#000000;
-}
-
-.teclado .reset:hover {
-  background-color: #ffff00;
-}
+/* ─── Display ──────────────────────────────────────────────────────────────── */
 
 .calculadora .display {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .calculadora .display .display-input {
-  box-sizing: border-box;
+  font-family: 'JetBrains Mono', monospace;
   width: 100%;
-  height: 60px;
-  font-size: 2rem;
+  height: 62px;
+  font-size: 1.75rem;
+  font-weight: 600;
   text-align: right;
-  padding: 10px;
+  padding: 0 1rem;
   border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: white;
-} 
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  color: #f1f5f9;
+  letter-spacing: 0.02em;
+  outline: none;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Teclado ──────────────────────────────────────────────────────────────── */
+
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.teclado button {
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  height: 52px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
+  background-color: #2a3142;
+  color: #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.teclado button:hover {
+  background-color: #3a4258;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.teclado button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Span 2 columnas */
+.teclado .span-two {
+  grid-column: span 2;
+}
+
+/* Operaciones binarias (+, -, ×, ÷) */
+.teclado .operation {
+  background-color: #312e4a;
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.teclado .operation:hover {
+  background-color: #3d3860;
+  color: #d8b4fe;
+}
+
+/* DEL */
+.teclado .delete {
+  background-color: #3b1f1f;
+  color: #f87171;
+}
+
+.teclado .delete:hover {
+  background-color: #4f2424;
+  color: #fca5a5;
+}
+
+/* C */
+.teclado .reset {
+  background-color: #2d3322;
+  color: #a3e635;
+}
+
+.teclado .reset:hover {
+  background-color: #3a4230;
+  color: #bef264;
+}
+
+/* Igual (=) */
+.teclado .equals {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.4);
+}
+
+.teclado .equals:hover {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  box-shadow: 0 5px 16px rgba(99, 102, 241, 0.55);
+}
