@@ -3,7 +3,9 @@ import { interval, type Subscription } from "rxjs";
 export class Cronometer {
   private subscription: Subscription | null = null;
   private estaPausado: boolean = false;
-  private tiempo: number = 60;
+  private tiempo: number = 0;
+  private startTime: number = 0;
+  private tiempoAcumulado: number = 0;
 
   private display: HTMLParagraphElement;
   private playButton: HTMLButtonElement;
@@ -21,8 +23,16 @@ export class Cronometer {
     this.display = display;
     this.playButton = playButton;
     this.pauseButton = pauseButton;
-    this.resumeButton = resumeButton;
-    this.resetButton = resetButton;
+
+    if (resumeButton.id === "restart" && resetButton.id === "resume") {
+      this.resumeButton = resetButton;
+      this.resetButton = resumeButton;
+    } else {
+      this.resumeButton = resumeButton;
+      this.resetButton = resetButton;
+    }
+
+    this.display.textContent = `${this.tiempo}s`;
 
     this.playButton.addEventListener("click", () => this.toggle());
     this.pauseButton.addEventListener("click", () => this.pausarCronometro());
@@ -33,47 +43,52 @@ export class Cronometer {
   private updateCronometro(): void {
     if (this.estaPausado) return;
 
-    const before = new Date();
-    const segundosBefore = before.toLocaleTimeString("es-ES", {
-      hour: undefined,
-      minute: undefined,
-      second: "2-digit",
-      hour12: false,
-    });
-    const now = new Date();
-    const segundosNow = now.toLocaleTimeString("es-ES", {
-      hour: undefined,
-      minute: undefined,
-      second: "2-digit",
-      hour12: false,
-    });
+    const tiempoTranscurridoMs = Date.now() - this.startTime + this.tiempoAcumulado;
+    this.tiempo = Math.floor(tiempoTranscurridoMs / 1000);
     this.display.textContent = `${this.tiempo}s`;
   }
 
   private pausarCronometro(): void {
-    this.estaPausado = true;
+    if (this.subscription !== null && !this.estaPausado) {
+      this.estaPausado = true;
+      this.tiempoAcumulado += Date.now() - this.startTime;
+    }
   }
 
   private resumirCronometro(): void {
-    this.estaPausado = false;
+    if (this.subscription !== null && this.estaPausado) {
+      this.estaPausado = false;
+      this.startTime = Date.now();
+      this.updateCronometro();
+    }
   }
 
   private restartCronometro(): void {
-    this.subscription!.unsubscribe();
-    this.subscription = null;
+    if (this.subscription !== null) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+    this.estaPausado = false;
+    this.tiempo = 0;
+    this.tiempoAcumulado = 0;
+    this.startTime = 0;
+    this.display.textContent = `${this.tiempo}s`;
   }
 
   private toggle(): void {
     if (this.subscription === null) {
       this.tiempo = 0;
+      this.tiempoAcumulado = 0;
+      this.startTime = Date.now();
       this.estaPausado = false;
-      this.updateCronometro();
+      this.display.textContent = `${this.tiempo}s`;
       this.subscription = interval(1000).subscribe(() =>
         this.updateCronometro(),
       );
     } else {
       this.subscription.unsubscribe();
       this.subscription = null;
+      this.estaPausado = false;
     }
   }
 }

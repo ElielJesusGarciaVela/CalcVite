@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartButton = document.querySelector<HTMLButtonElement>('#restart')!;
   const resumeButton = document.querySelector<HTMLButtonElement>('#resume')!;
 
-  new Cronometer(cronometer, playButton, pauseButton, restartButton, resumeButton);
+  new Cronometer(cronometer, playButton, pauseButton, resumeButton, restartButton);
 
   /**
    * Calculator Class
